@@ -1,0 +1,9 @@
+[workspace]
+members = [
+    "crates/ssdk-http",
+]
+resolver = "2"
+
+[workspace.dependencies]
+wit-bindgen = { version = "0.16.0" }
+

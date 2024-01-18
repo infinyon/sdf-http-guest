@@ -1,0 +1,10 @@
+target/
+**/*.rs.bk
+.DS_Store
+.idea/
+VERSION
+.env
+.vscode/
+vendor/
+*.tmp
+

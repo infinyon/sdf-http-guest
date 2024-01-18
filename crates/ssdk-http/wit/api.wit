@@ -1,0 +1,5 @@
+package ssdk-http:http;
+ 
+world http {
+    import wasi:http/outgoing-handler@0.2.0-rc-2023-12-05;
+}

@@ -118,6 +118,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f98d2aa92eebf49b69786be48e4477826b256916e84a57ff2a4f21923b48eb4c"
 
 [[package]]
+name = "sdf-http"
+version = "0.4.0"
+dependencies = [
+ "anyhow",
+ "http",
+ "wit-bindgen",
+]
+
+[[package]]
 name = "semver"
 version = "1.0.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -167,15 +176,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "62bde1398b09b9f93fc2fc9b9da86e362693e999d3a54a8ac47a99a5a73f638b"
 dependencies = [
  "smallvec",
-]
-
-[[package]]
-name = "ssdk-http"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "http",
- "wit-bindgen",
 ]
 
 [[package]]

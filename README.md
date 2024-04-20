@@ -1,2 +1,3 @@
-# ssdk
-Software Development Kit for Stateful Service
+# HTTP SDF
+ 
+ http support for SDF

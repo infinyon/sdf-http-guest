@@ -1,4 +1,4 @@
-package ssdk-http:http;
+package sdf-http:http;
  
 world http {
     import wasi:http/outgoing-handler@0.2.0;

@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "crates/ssdk-http",
+    "crates/sdf-http",
 ]
 resolver = "2"
 

@@ -1,10 +1,10 @@
 [package]
-name = "ssdk-http"
-version = "0.3.0"
+name = "sdf-http"
+version = "0.4.0"
 edition = "2021"
 authors = ["Fluvio Contributors <team@fluvio.io>"]
-repository = "https://github.com/infinyon/ssdk"
-description = "SSDK Http API for WASI targets"
+repository = "https://github.com/infinyon/sdf-http-guest"
+description = "SDF Http API for WASI targets"
 
 [dependencies]
 anyhow = { workspace = true }

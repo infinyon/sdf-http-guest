@@ -1,6 +1,4 @@
-pub mod http {
-    pub use http::*;
-}
+pub use http;
 
 use anyhow::anyhow;
 pub type Result<T> = anyhow::Result<T>;

@@ -1,0 +1,11 @@
+package sdf:http;
+ 
+
+
+interface test-guest {
+    run: func();
+}
+
+world test-world  {
+  export test-guest;
+}

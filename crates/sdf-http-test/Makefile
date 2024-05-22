@@ -9,10 +9,11 @@ TEST_WASM=test
 ADOPTOR=adaptors/wasi_snapshot_preview1.reactor.wasm
 
 build:
+	rm $(WASM_TARGET_BUILD)/$(TEST_WASM).wasm
 	cargo build -p sdf-http-test --target $(WASM_TARGET)
 	wasm-tools component new $(WASM_TARGET_BUILD)/sdf_http_test.wasm -o $(WASM_TARGET_BUILD)/$(TEST_WASM).wasm --adapt $(ADOPTOR)
 
 .PHONY: test
-test: 
+test: build
 	WASM_FILE=$(WASM_TARGET_BUILD)/$(TEST_WASM).wasm cargo test -p sdf-http-test -- --nocapture
 

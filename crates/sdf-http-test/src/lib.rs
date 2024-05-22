@@ -14,6 +14,6 @@ struct  TestComponent;
 
 impl TestGuest for TestComponent {
     fn run() -> String {
-        todo!()
+       "hello world".to_string()
     }
 }

@@ -69,8 +69,9 @@ fn load_component() -> (Store<HttpContext>, Component, Linker<HttpContext>) {
 
     add_to_linker_sync(&mut linker).expect("link");
 
-    let wasm_dir = std::env::var("WASM_FILE").expect("WASM_FILE");
-    let component = Component::from_file(&engine, wasm_dir).expect("component");
+    let wasm_file = std::env::var("WASM_FILE").expect("WASM_FILE");
+    println!("Loading wasm file: {}", wasm_file);
+    let component = Component::from_file(&engine, wasm_file).expect("component");
     let store = Store::new(&engine, create_context());
     (store, component, linker)
 }

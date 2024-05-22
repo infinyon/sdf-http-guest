@@ -6,6 +6,11 @@ authors = ["Fluvio Contributors <team@fluvio.io>"]
 repository = "https://github.com/infinyon/sdf-http-guest"
 description = "Test Guest Library"
 
+
+[lib]
+crate-type = ["cdylib"]
+
+
 [dependencies]
 anyhow = { workspace = true }
 wit-bindgen = { workspace = true, features = ["macros"]}

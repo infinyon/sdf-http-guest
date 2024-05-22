@@ -7,7 +7,7 @@ WASM_TARGET_BUILD=$(BASE_DIR)/target/$(WASM_TARGET)/$(WASM_PROFILE)
 VALUE_GUEST_PRJ=value-simple-guest
 
 build:
-	cargo build --target $(WASM_TARGET)
+	cargo build -p sdf-http-test --target $(WASM_TARGET)
 
 .PHONY: test
 test: 

@@ -83,7 +83,7 @@ fn test_http_sync() {
         TestWorld::instantiate(&mut store, &component, &linker).expect("instantiate");
 
     binding
-        .sdf_http_test_guest()
+        .sdf_test_test_guest()
         .call_run(store)
         .expect("init state");
 }

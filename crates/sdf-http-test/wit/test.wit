@@ -1,9 +1,9 @@
-package sdf:http;
+package sdf:test;
  
 
 
 interface test-guest {
-    run: func();
+    run: func() -> string;
 }
 
 world test-world  {

@@ -68,6 +68,7 @@ fn load_component() -> (Store<HttpContext>, Component, Linker<HttpContext>) {
     let mut linker: Linker<HttpContext> = Linker::new(&engine);
 
     add_to_linker_sync(&mut linker).expect("link");
+    wasmtime_wasi_http::proxy::add_only_http_to_linker(&mut linker).expect("link");
 
     let wasm_file = std::env::var("WASM_FILE").expect("WASM_FILE");
     println!("Loading wasm file: {}", wasm_file);
@@ -83,8 +84,10 @@ fn test_http_sync() {
     let (binding, _) =
         TestWorld::instantiate(&mut store, &component, &linker).expect("instantiate");
 
-    binding
+    let output = binding
         .sdf_test_test_guest()
         .call_run(store)
         .expect("init state");
+    println!("output: {}", output);
+    assert!(output.contains("user-agent"));
 }

@@ -1,0 +1,13 @@
+[package]
+name = "http-test-server"
+version = "0.0.0"
+edition = "2021"
+authors = ["Fluvio Contributors <team@fluvio.io>"]
+repository = "https://github.com/infinyon/sdf-http-guest"
+description = "Create a test server for http service"
+
+[dependencies]
+anyhow = { workspace = true }
+poem = { workspace = true, features = ["server"] }
+tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }
+tracing-subscriber.workspace = true

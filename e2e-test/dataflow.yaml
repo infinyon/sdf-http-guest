@@ -1,0 +1,48 @@
+apiVersion: 0.5.0
+meta:
+  name: http-test
+  version: 0.1.0
+  namespace: test
+
+config:
+  converter: raw
+
+
+topics:
+  input-topic:
+    name: input
+    schema:
+      value:
+        type: string
+
+  output-topic:
+    name: output
+    schema:
+      value:
+        type: string
+
+
+services:
+
+  # simple service that make http call to hello service and send back to topic
+  hello:
+    sources:
+      - type: topic
+        id: input-topic
+    transforms:
+      - operator: map
+        dependencies:
+          - name: sdf-http
+            path: "../../../../../crates/sdf-http"
+        run: |
+          fn invoke_http(input: String) -> Result<String> {
+            
+            let uri = format!("http://localhost:3000/hello/{}", input);
+            let request = sdf_http::http::Request::builder().uri(uri).body("")?;
+            let response = sdf_http::blocking::send(request)?.into_body();
+            Ok(String::from_utf8(response)?)
+          }
+    sinks:
+      - type: topic
+        id: output-topic
+    

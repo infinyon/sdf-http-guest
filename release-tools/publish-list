@@ -1,0 +1,6 @@
+# This list is approximately sorted for dependency resolution
+# Used by publish crate and crate version check scripts
+
+PUBLISH_CRATES=(
+    crates/sdf-http
+)

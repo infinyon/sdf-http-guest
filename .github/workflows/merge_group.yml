@@ -20,10 +20,8 @@ on:
 jobs:
 
   build:
-    name: Build ${{ matrix.rust-target }}
+    name: Build
     runs-on: ubuntu-latest
-
-
 
 
     steps:

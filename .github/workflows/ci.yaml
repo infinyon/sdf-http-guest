@@ -4,18 +4,22 @@ permissions: read-all
 
 concurrency:
   group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   pull_request:
     branches: [main]
 
 env:
-    WAST_TARGET: wasm32-wasi
+    WAST_TARGET: wasm32-wasip2
+    FLUVIO_URL: https://hub.infinyon.cloud/install/install.sh
+    FLUVIO_CHANNEL: stable
+    SDF_VERSION: sdf-beta5
 
 jobs:
 
-  build:
-    name: Build
+  build-guest:
+    name: Build Guest
     runs-on: ubuntu-latest
 
 
@@ -39,14 +43,74 @@ jobs:
 
       - name: Build
         timeout-minutes: 40
-        run: make build
+        run: make build-guest
+
+
+  e2e-test:
+    name: E2E Test
+    runs-on: ubuntu-latest
+      
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: install wasm target
+        run: |
+          rustup target add ${{ env.WAST_TARGET }}
+
+      - name: Setup Rust Cache
+        uses: Swatinem/rust-cache@v2
+        timeout-minutes: 10
+
+
+      - name: Build HTTP Server
+        run: make build-http
+
+      - name: Start HTTP Server
+        run: make run-http
+
+      - name: Setup fluvio bin path
+        run: |
+          echo "~/.fluvio/bin" >> $GITHUB_PATH
+          echo "~/.fvm/bin" >> $GITHUB_PATH
+
+      - name: Install FVM and Fluvio
+        timeout-minutes: 10
+        run: |
+          curl -fsS ${{ env.FLUVIO_URL }} | bash
+
+      - name: Install SDF
+        run:  fvm install ${{ ENV.SDF_VERSION }}
+
+      - name: Test SDF
+        run: sdf version
+
+      - name: Install Local Fluvio cluster
+        timeout-minutes: 3
+        run: fluvio cluster start
+
+      - name: Start dataflow
+        run: |
+          make -C e2e-test run-ci
+
+      - name: Test
+        run: |
+          make test-http
+
+        
+
   
 
   # To satisfy the merge queue check       
   done:
     name: Done
     needs:
-      - build
+      - build-guest
+      - e2e-test
     runs-on: ubuntu-latest
     if: always()
     steps:

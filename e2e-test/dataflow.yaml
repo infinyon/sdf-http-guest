@@ -39,7 +39,7 @@ services:
             
             let uri = format!("http://localhost:3000/hello/{}", input);
             let response =  sdf_http::get(uri)?;
-            Ok(response.text())
+            Ok(response.text()?)
           }
     sinks:
       - type: topic

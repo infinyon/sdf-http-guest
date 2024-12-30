@@ -1,4 +1,4 @@
-name: 
+name: main CI workflow
 
 permissions: read-all
 
@@ -73,18 +73,17 @@ jobs:
       - name: Start HTTP Server
         run: make run-http
 
-      - name: Setup fluvio bin path
-        run: |
-          echo "~/.fluvio/bin" >> $GITHUB_PATH
-          echo "~/.fvm/bin" >> $GITHUB_PATH
 
       - name: Install FVM and Fluvio
         timeout-minutes: 10
         run: |
           curl -fsS ${{ env.FLUVIO_URL }} | bash
+          echo "$HOME/.fvm/bin" >> $GITHUB_PATH
 
       - name: Install SDF
-        run:  fvm install ${{ ENV.SDF_VERSION }}
+        run: |
+          fvm install ${{ ENV.SDF_VERSION }}
+          echo "$HOME/.fluvio/bin" >> $GITHUB_PATH
 
       - name: Test SDF
         run: sdf version
@@ -96,10 +95,12 @@ jobs:
       - name: Start dataflow
         run: |
           make -C e2e-test run-ci
+          sleep 120
 
       - name: Test
         run: |
-          make test-http
+          cat /tmp/sdf.log
+          make validate-dataflow
 
         
 

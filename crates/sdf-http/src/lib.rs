@@ -38,12 +38,32 @@ mod wrapper {
         }
     }
 
+    impl From<Response<Vec<u8>>> for ByteResponse {
+        fn from(response: Response<Vec<u8>>) -> Self {
+            ByteResponse(response)
+        }
+    }
+
     impl ByteResponse {
         pub fn text(self) -> anyhow::Result<String> {
             Ok(String::from_utf8(self.0.into_body())?)
         }
+
+        pub fn bytes(self) -> Vec<u8> {
+            self.0.into_body()
+        }
+
+        pub fn as_slice(&self) -> &[u8] {
+            self.0.body()
+        }
+
+        pub fn into_inner(self) -> Response<Vec<u8>> {
+            self.0
+        }
     }
 
+    /// Shortcut method to quickly make a sync `GET` request using HTTP WASI call
+    /// and return the response with Wrapper around it.
     pub fn get<T>(uri: T) -> anyhow::Result<ByteResponse>
     where
         T: TryInto<Uri>,
@@ -51,7 +71,7 @@ mod wrapper {
     {
         let request = crate::http::Request::builder().uri(uri).body("")?;
         let response = crate::blocking::send(request)?;
-        Ok(ByteResponse(response))
+        Ok(response.into())
     }
 }
 

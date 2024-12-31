@@ -14,6 +14,47 @@ mod bindings {
     });
 }
 
+pub use wrapper::*;
+
+// high level API similar to Reqwest
+mod wrapper {
+    use std::ops::{Deref, DerefMut};
+
+    use http::{Error, Response, Uri};
+
+    pub struct ByteResponse(Response<Vec<u8>>);
+
+    impl Deref for ByteResponse {
+        type Target = Response<Vec<u8>>;
+
+        fn deref(&self) -> &Self::Target {
+            &self.0
+        }
+    }
+
+    impl DerefMut for ByteResponse {
+        fn deref_mut(&mut self) -> &mut Self::Target {
+            &mut self.0
+        }
+    }
+
+    impl ByteResponse {
+        pub fn text(self) -> anyhow::Result<String> {
+            Ok(String::from_utf8(self.0.into_body())?)
+        }
+    }
+
+    pub fn get<T>(uri: T) -> anyhow::Result<ByteResponse>
+    where
+        T: TryInto<Uri>,
+        <T as TryInto<Uri>>::Error: Into<Error>,
+    {
+        let request = crate::http::Request::builder().uri(uri).body("")?;
+        let response = crate::blocking::send(request)?;
+        Ok(ByteResponse(response))
+    }
+}
+
 pub mod blocking {
     use anyhow::anyhow;
 

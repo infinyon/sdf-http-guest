@@ -97,10 +97,14 @@ jobs:
           make -C e2e-test run-ci
           sleep 120
 
-      - name: Test
+      - name: Test Get
         run: |
-          cat /tmp/sdf.log
-          make validate-dataflow
+          make validate-df-get
+
+
+      - name: Test Post
+        run: |
+          make validate-df-post
 
         
 

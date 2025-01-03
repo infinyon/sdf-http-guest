@@ -7,40 +7,92 @@ meta:
 config:
   converter: raw
 
+types:
+  out:
+    type: object
+    properties:
+      code:
+        type: u32
+      message:
+        type: string
 
 topics:
-  input-topic:
-    name: input
+  input-get:
+    name: input-get
     schema:
       value:
         type: string
 
-  output-topic:
-    name: output
+  output-get:
+    name: output-get
     schema:
       value:
         type: string
+
+
+  input-post:
+    name: input-post
+    schema:
+      value:
+        type: string
+
+  output-post:
+    name: output-post
+    schema:
+      value:
+        converter: json
+        type: out
 
 
 services:
 
   # simple service that make http call to hello service and send back to topic
-  hello:
+  get:
     sources:
       - type: topic
-        id: input-topic
+        id: input-get
     transforms:
       - operator: map
         dependencies:
           - name: sdf-http
             path: "../../../../../crates/sdf-http"
         run: |
-          fn invoke_http(input: String) -> Result<String> {
+          fn invoke_get(input: String) -> Result<String> {
             
             let uri = format!("http://localhost:3000/hello/{}", input);
             Ok(sdf_http::get(uri)?.text()?)
           }
     sinks:
       - type: topic
-        id: output-topic
+        id: output-get
     
+
+  post:
+    sources:
+      - type: topic
+        id: input-post
+
+    transforms:
+      - operator: map
+        dependencies:
+          - name: sdf-http
+            path: "../../../../../crates/sdf-http"
+            features: ["serde_json"]
+        run: |
+          fn invoke_post(input: String) -> Result<Out> {
+             
+             let input = sdf_http::serde_json::json!({
+                "name": input
+             });
+             let response = sdf_http::json(input.to_string())
+                  .bearer("123")
+                  .post("http://localhost:3000/create")?;
+
+             let out = sdf_http::serde_json::from_slice(response.as_slice())?;
+          
+            Ok(out)
+             
+          }
+    sinks:
+      - type: topic
+        id: output-post

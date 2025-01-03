@@ -1,6 +1,6 @@
 [package]
 name = "sdf-http"
-version = "0.4.2"
+version = "0.4.3"
 edition = "2021"
 authors = ["Fluvio Contributors <team@fluvio.io>"]
 repository = "https://github.com/infinyon/sdf-http-guest"
@@ -9,8 +9,13 @@ license = "Apache-2.0"
 categories = ["wasm"]
 keywords = ["streaming", "stream", "sdf"]
 
+[features]
+serde = ["dep:serde"]
+serde_json = ["dep:serde_json"]
+
 [dependencies]
 anyhow = { workspace = true }
 http = { workspace = true }
-
+serde = { workspace = true, features = ['derive'], optional = true }
+serde_json = { workspace = true, optional = true }
 wit-bindgen = { workspace = true, features = ['default'] }

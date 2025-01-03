@@ -46,6 +46,8 @@ function cargo_publish_all() {
             echo "$crate_path";
             pushd "$crate_path";
 
+            make setup-publish;
+
             # Save the `cargo publish` in case we get a non-zero exit
             cargo_publish;
             result="$?";
